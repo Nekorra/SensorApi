@@ -1,9 +1,10 @@
-package com.fabiorogeriosj.plugin;
-
+package cordova.plugin.sensorapi.SensorApi;
 import java.util.List;
 import org.apache.cordova.*;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.hardware.*;
 import android.os.Handler;
@@ -28,7 +29,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
         this.sensorData = new JSONObject();
         this.TYPE_SENSOR = "";
     }
-    
+
     /**
      * Sets the context of the Command. This can then be used to do things like
      * get file paths associated with the Activity.
@@ -48,15 +49,15 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
      * @param args                  JSONArry of arguments for the plugin.
      * @param callbackS=Context     The callback id used when calling back into JavaScript.
      * @return                      True if the action was valid.
-     * @throws JSONException 
+     * @throws JSONException
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
-        if (action.equals("enableSensor")) {
+        if (action.equals("start")) {
             this.TYPE_SENSOR = args.getString(0);
             this.start(this.TYPE_SENSOR);
         }
-        else if (action.equals("disableSensor")) {
+        else if (action.equals("stop")) {
             this.stop();
         }
         else if (action.equals("getState")) {
@@ -76,20 +77,20 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.IO_EXCEPTION, Sensors.ERROR_FAILED_TO_START));
                     return true;
                 }
-            
+
                  */
-                
+
                 // Set a timeout callback on the main thread.
                 /*
 
-                Handler handler = new Handler(Looper.getMainLooper()); 
+                Handler handler = new Handler(Looper.getMainLooper());
                     handler.postDelayed(new Runnable() {
                         public void run() {
                             Sensors.this.timeout();
                         }
                     }, 2000);
                  */
-                
+
             } else {
             }
         } else {
@@ -127,8 +128,8 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
      *
      * @return          status of listener
      */
-    public int start(String sens) {
-        
+    public void start(String sens) throws JSONException {
+
         // Get sensor from sensor manager
         @SuppressWarnings("deprecation")
         List<Sensor> list = new ArrayList<Sensor>();
@@ -178,7 +179,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
         if (list != null && list.size() > 0) {
             this.mSensor = list.get(0);
             this.sensorManager.registerListener(this, this.mSensor, SensorManager.SENSOR_DELAY_NORMAL);
-            this.sensorData.put(sens, ""); 
+            this.sensorData.put(sens, "");
         }
     }
 
@@ -220,7 +221,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("ACCELEROMETER", value);
-   
+
             }
             if (sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE) {
                 JSONArray value = new JSONArray();
@@ -228,7 +229,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("AMBIENT_TEMPERATURE", value);
-                
+
 
             }
             if (sensor.getType() == Sensor.TYPE_GAME_ROTATION_VECTOR) {
@@ -237,8 +238,8 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("GAME_ROTATION_VECTOR", value);
-                
-    
+
+
             }
             if (sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) {
                 JSONArray value = new JSONArray();
@@ -246,8 +247,8 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("GEOMAGNETIC_ROTATION_VECTOR", value);
-                
-  
+
+
             }
             if (sensor.getType() == Sensor.TYPE_GRAVITY) {
                 JSONArray value = new JSONArray();
@@ -255,8 +256,8 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("GRAVITY", value);
-                
-     
+
+
             }
             if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
                 JSONArray value = new JSONArray();
@@ -264,8 +265,8 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("GYROSCOPE", value);
-                
-  
+
+
             }
             if (sensor.getType() == Sensor.TYPE_GYROSCOPE_UNCALIBRATED) {
                 JSONArray value = new JSONArray();
@@ -273,8 +274,8 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("GYROSCOPE_UNCALIBRATED", value);
-                
-        
+
+
             }
             if (sensor.getType() == Sensor.TYPE_LIGHT) {
                 JSONArray value = new JSONArray();
@@ -282,26 +283,26 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("LIGHT", value);
-                
+
 
             }
             if (sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
                 JSONArray value = new JSONArray();
                 for(int i=0;i < event.values.length;i++){
-                    this.value.put(Float.parseFloat(event.values[i]+""));
+                    value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("LINEAR_ACCELERATION", value);
-                
-   
+
+
             }
             if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
                 JSONArray value = new JSONArray();
                 for(int i=0;i < event.values.length;i++){
-                    this.value.put(Float.parseFloat(event.values[i]+""));
+                    value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("MAGNETIC_FIELD", value);
-                
-   
+
+
             }
             if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED) {
                 JSONArray value = new JSONArray();
@@ -309,7 +310,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("MAGNETIC_FIELD_UNCALIBRATED", value);
- 
+
             }
             if (sensor.getType() == Sensor.TYPE_ORIENTATION) {
                 JSONArray value = new JSONArray();
@@ -317,8 +318,8 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("ORIENTATION", value);
-                
-    
+
+
             }
             if (sensor.getType() == Sensor.TYPE_PRESSURE) {
                 JSONArray value = new JSONArray();
@@ -326,7 +327,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("PRESSURE", value);
-                
+
 
             }
             if (sensor.getType() == Sensor.TYPE_PROXIMITY) {
@@ -335,7 +336,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("PROXIMITY", value);
-  
+
             }
             if (sensor.getType() == Sensor.TYPE_RELATIVE_HUMIDITY) {
                 JSONArray value = new JSONArray();
@@ -343,7 +344,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("RELATIVE_HUMIDITY", value);
-   
+
             }
             if (sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
                 JSONArray value = new JSONArray();
@@ -351,8 +352,8 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("ROTATION_VECTOR", value);
-                
-    
+
+
             }
             if (sensor.getType() == Sensor.TYPE_SIGNIFICANT_MOTION) {
                 JSONArray value = new JSONArray();
@@ -360,7 +361,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("SIGNIFICANT_MOTION", value);
-                
+
 
             }
             if (sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
@@ -369,7 +370,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("STEP_COUNTER", value);
-    
+
             }
             if (sensor.getType() == Sensor.TYPE_STEP_DETECTOR) {
                 JSONArray value = new JSONArray();
@@ -377,8 +378,8 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                     value.put(Float.parseFloat(event.values[i]+""));
                 }
                 this.sensorData.put("STEP_DETECTOR", value);
-                
-  
+
+
             }
             if (sensor.getType() == Sensor.TYPE_TEMPERATURE) {
                 JSONArray value = new JSONArray();
@@ -387,7 +388,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
                 }
                 this.sensorData.put("TEMPERATURE", value);
             }
-            
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -395,16 +396,12 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
 
 
     /**
-     * Get the most recent distance. 
+     * Get the most recent distance.
      *
-     * @return          distance 
+     * @return          distance
      */
-    public int[] getValue(String sens) {
-        return this.value.getJSONObject(sens);
+    public String getValue(String sens) throws JSONException {
+      return this.sensorData.getString(sens);
     }
 
-
-
- 
-
-}
+  }
