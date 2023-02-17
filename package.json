@@ -1,0 +1,11 @@
+{
+  "name": "sensorapi",
+  "version": "1.0.0",
+  "description": "api to get sensor data on android",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abhinav Srinivas",
+  "license": "ISC"
+}
