@@ -52,11 +52,11 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
      */
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
 
-        if (action.equals("start")) {
+        if (action.equals("enableSensor")) {
             this.TYPE_SENSOR = args.getString(0);
             this.start(this.TYPE_SENSOR);
         }
-        else if (action.equals("stop")) {
+        else if (action.equals("disableSensor")) {
             this.stop();
         }
         else if (action.equals("getState")) {
