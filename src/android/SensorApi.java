@@ -70,29 +70,10 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
             }
             // If not running, then this is an async call, so don't worry about waiting
             if (this.sensorData.has(this.TYPE_SENSOR)) {
+
                 callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, getValue(this.TYPE_SENSOR)));
-
-                /*
-                 if (r == Sensors.ERROR_FAILED_TO_START) {
-                    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.IO_EXCEPTION, Sensors.ERROR_FAILED_TO_START));
-                    return true;
-                }
-
-                 */
-
-                // Set a timeout callback on the main thread.
-                /*
-
-                Handler handler = new Handler(Looper.getMainLooper());
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            Sensors.this.timeout();
-                        }
-                    }, 2000);
-                 */
-
-            } else {
-            }
+                
+            } 
         } else {
             // Unsupported action
             return false;
@@ -400,7 +381,7 @@ public class SensorApi extends CordovaPlugin implements SensorEventListener {
      *
      * @return          distance
      */
-    public String getValue(String sens) throws JSONException {
+    public String[] getValue(String sens) throws JSONException {
       return this.sensorData.getString(sens);
     }
 
