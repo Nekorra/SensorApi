@@ -3,6 +3,12 @@
 
    <name>SensorApi</name>
    <repo>https://github.com/Nekorra/SensorApi</repo>
+
+   <engines>
+    <engine name="cordova" version=">=3.4.0"/>
+  </engines>
+
+  
    <js-module name="SensorApi" src="www/SensorApi.js">
       <clobbers target="SensorApi" />
    </js-module>
